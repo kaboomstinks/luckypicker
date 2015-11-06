@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		
+		<style>
+		
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: 'Roboto', sans-serif;
+				font-size: 16px;
+			}
+	
+			#wrapper {
+				width: 600px;
+				margin: 100px auto;
+			}
+
+			#messages {
+				overflow: auto;
+				height: 200px;
+			}
+		</style>
+		
+	</head>
+	
+	<body>
+		<!--h2 id="uname"></h2-->
+		
+		<div id="wrapper">
+			
+			<div id="messages">
+			
+			</div><br /><br /><br />
+		
+			Message:<br />
+			<input class="input-lg col-xs-12" name="message" type="text" /><br /><br /><br />
+			<button class="btn btn-default">Send</button>
+		</div>
+		
+		<script>
+			
+			$(document).ready(function(){
+				
+				var input = $('input');
+				var btn_send = $('button');
+				var url = window.location.href;
+				var username = url.substring(29);
+				var u = decodeURIComponent(username);
+				
+				var d = new Date();
+				var buwan = d.getMonth();
+				var araw = d.getDay();
+				var taon = d.getFullYear();
+				
+				var ref = new Firebase('https://angbase.firebaseio.com');
+				
+			
+				
+				input.focus();
+				
+				btn_send.click(function(){
+					var message = input.val();
+						
+					ref.push({name: u, text: message});	
+					input.val('');
+				});
+				
+				input.keypress(function(e){
+					if(e.keyCode == 13){
+						btn_send.click();
+					}
+				});
+			
+				ref.on('child_added', function(snapshot){
+					var message = snapshot.val();
+					displayChatMessage(message.name, message.text);
+					$("#messages").animate({ scrollTop: $('#messages').height()}, 1000);
+				});
+					
+				function displayChatMessage(name, text){
+					var whole_str = '<span style="font-size:17px">' + name + '</span>:<em>&nbsp;&nbsp;' + text + '</em><br />'; 
+					$('#messages').append(whole_str);
+				}
+			});
+		
+		</script>
+	</body>
+</html>
