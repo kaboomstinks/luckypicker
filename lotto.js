@@ -5,14 +5,14 @@ app.controller('lottoCtrl', function($scope){
 	$scope.b_disable = true;
 	
 	$scope.pick = function(){
-		var selected = document.getElementsByName('l_variant')[0].value;
-		var rnd_number, i=1, checker, w_array = [], l_array = [];
+		var selected = document.getElementsByName('l_variant')[0].value;	// get value of selected select tag
+		var rnd_number, i=1, checker, w_array = [], l_array = [];			
 		
 		while(i<=6){
-			rnd_number = Math.floor((Math.random() * selected) + 1);
-			checker = l_array.indexOf(rnd_number);
+			rnd_number = Math.floor((Math.random() * selected) + 1);		// produce a random number base on the selected lotto variant
+			checker = l_array.indexOf(rnd_number);							// check if random number was chosen already
 		
-			if(checker == -1){
+			if(checker == -1){												// if it's not, push it in the l_array
 				l_array.push(rnd_number);
 				i++;
 			}
